@@ -5,8 +5,13 @@
 using namespace std;
 
     class clients{
+        private:
+            string name;
+            int ID;
+
         public:
-            void addClient(string name_val, int ID_val){
+        //User-defined Constructors for creating clients with id and name
+            clients(string name_val, int ID_val){
                 name = name_val;
                 ID = ID_val;
             }
@@ -19,9 +24,6 @@ using namespace std;
                 return ID;
             }
 
-        private:
-            string name;
-            int ID;
     };
 
     vector<clients> client_list;
@@ -45,14 +47,13 @@ using namespace std;
 
 int main(){
     string new_name;
-    int new_ID, choice=1;
+    int new_ID, choice{1};
     while(choice==1){
         cout<<"enter new client name: ";
         cin>>new_name;
         cout<<"enter new client ID: ";
         cin>>new_ID;
-        clients new_client;
-        new_client.addClient(new_name, new_ID);
+        clients new_client(new_name, new_ID);
         client_list.push_back(new_client);
                 for(int i=0; i<client_list.size(); i++){
                 cout<<client_list[i].getName()<<" "<<client_list[i].getID()<<endl;
