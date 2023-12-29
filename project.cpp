@@ -68,25 +68,48 @@ using namespace std;
     }
 
 
-int main(){
+int main() {
     string new_name, myText;
-    int new_ID, choice= 1;
+    int new_ID, choice = 1;
     vector<clients> client_list;
     const string clientsFile = "clients.txt";
     readFile(clientsFile, &client_list);
-    while(choice==1){
-        cout<<"enter new client name: ";
-        cin>>new_name;
-        cout<<"enter new client ID: ";
-        cin>>new_ID;
-        clients new_client(new_name, new_ID);
-        client_list.push_back(new_client);
-        writeFile(clientsFile, client_list);
-        
-                for(int i=0; i<client_list.size(); i++){
-                cout<<client_list[i].getName()<<" "<<client_list[i].getID()<<endl;
+    while (choice != 0) {
+        cout << "Menu:\n";
+        cout << "1. Add new client\n";
+        cout << "2. Delete client by ID\n";
+        cout << "3. Show All clients\n";
+        cout << "4. Paying Bill\n";
+        cout << "5. Price Changing\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        if (choice == 1) {
+            cout << "enter new client name: ";
+            cin >> new_name;
+            cout << "enter new client ID: ";
+            cin >> new_ID;
+            clients new_client(new_name, new_ID);
+            client_list.push_back(new_client);
+            writeFile(clientsFile, client_list);
+
+            for (int i = 0; i < client_list.size(); i++) {
+                cout << client_list[i].getName() << " " << client_list[i].getID() << endl;
             }
-        cout<<"enter 1 to add new client, 0 to exit: ";
-        cin>>choice;
+            cout << "enter 1 to add new client, 0 to exit: ";
+            cin >> choice;
+        } else if (choice == 2) {
+            int del_ID;
+            cout << "enter delete for ID :";
+            cin >> del_ID;
+        } else if (choice == 3) {
+
+        } else if (choice == 4) {
+
+        } else if (choice == 5) {
+
+        } else if (choice == 0) {
+            cout << "Exiting the program.\n";
+        }
     }
 }
