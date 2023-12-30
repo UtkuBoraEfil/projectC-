@@ -66,19 +66,65 @@ using namespace std;
         outputFile.close();
 
     }
+
+    void deleteClient(vector<clients> *client_list, int del_ID){
+        bool isDeleted = false;
+        for(int i=0; i<client_list->size(); i++){
+            if(client_list->at(i).getID() == del_ID){
+                client_list->erase(client_list->begin()+i);
+                cout<<endl<<"Client deleted."<<endl;
+                isDeleted = true;
+            }
+            writeFile("clients.txt", *client_list);
+        }
+        if(!isDeleted){
+            cout<<endl<<"Client not found."<<endl;
+        }
+        
+    }
+
 void changeprice(double& industry, double& farming, double& home) {
-    cout << "New industry multiplier : ";
-    cin >> industry;
-    cout << "New Farming multiplier : ";
-    cin >> farming;
-    cout << "New Home multiplier : ";
-    cin >> home;
+    int choice, isOver=1;
+    while(isOver){
+    cout<<endl<<endl<<"1. industry multiplier"<<endl<<"2. Farming multiplier"<<endl<<"3. Home multiplier"<<endl<<endl<<"choose which one to change: ";
+    cin>>choice;
+        if(choice == 1){
+        cout <<endl<< "New industry multiplier : ";
+        cin >> industry;
+        cout<<"industry multiplier changed."<<endl;
+    }
+    else if(choice == 2){
+        cout <<endl<< "New Farming multiplier : ";
+        cin >> farming;
+        cout<<"Farming multiplier changed."<<endl;
+    }   
+    else if(choice == 3){
+        cout <<endl<< "New Home multiplier : ";
+        cin >> home;
+        cout<<"Home multiplier changed."<<endl;
+    }
+    cout<<endl<<endl<<"1. Change another multiplier"<<endl<<"0. Exit"<<endl<<endl<<"choose: ";
+    cin>>isOver;
+    }
+
 }
 
 void viewprice(double industry, double farm, double home) {
-    cout << "industry multiplier : " << industry << "\n";
+    cout <<endl<<endl<< "industry multiplier : " << industry << "\n";
     cout << "Farming multiplier : " << farm << "\n";
     cout << "Home multiplier : " << home << "\n";
+}
+
+void menu(){
+    cout << endl<<endl<<"---------------MENU---------------\n";
+        cout << "1. Add new client\n";
+        cout << "2. Delete client by ID\n";
+        cout << "3. Show All clients\n";
+        cout << "4. Price Changing\n";
+        cout << "5. View Price Multipliers\n";
+        cout << "6. Paying Bill\n";
+        cout << "0. Exit\n"<<endl;
+        cout << "Enter your choice: ";
 }
 
 int main() {
@@ -91,15 +137,7 @@ int main() {
     const string clientsFile = "clients.txt";
     readFile(clientsFile, &client_list);
     while (choice != 0) {
-        cout << "Menu:\n";
-        cout << "1. Add new client\n";
-        cout << "2. Delete client by ID\n";
-        cout << "3. Show All clients\n";
-        cout << "4. Price Changing\n";
-        cout << "5. View Price Multipliers\n";
-        cout << "6. Paying Bill\n";
-        cout << "0. Exit\n";
-        cout << "Enter your choice: ";
+        menu();
         cin >> choice;
         if (choice == 1) {
             cout << "enter new client name: ";
@@ -109,18 +147,18 @@ int main() {
             clients new_client(new_name, new_ID);
             client_list.push_back(new_client);
             writeFile(clientsFile, client_list);
-
+            cout<<endl<<"New client added."<<endl;
+        } else if (choice == 2) {
+            int del_ID;
+            cout <<endl<< "enter delete for ID :";
+            cin >> del_ID;
+            deleteClient(&client_list, del_ID);
+        } else if (choice == 3) {
+            cout <<endl<<endl<<"---------------CLIENTS---------------\n"<<endl;
             for (int i = 0; i < client_list.size(); i++) {
                 cout << client_list[i].getName() << " " << client_list[i].getID() << endl;
             }
-            cout << "enter 1 to add new client, 0 to exit: ";
-            cin >> choice;
-        } else if (choice == 2) {
-            int del_ID;
-            cout << "enter delete for ID :";
-            cin >> del_ID;
-        } else if (choice == 3) {
-
+            cout<< endl;
         } else if (choice == 4) {
             changeprice(industryM, farmingM, homeM);
         } else if (choice == 5) {
