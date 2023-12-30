@@ -66,9 +66,25 @@ using namespace std;
         outputFile.close();
 
     }
+void changeprice(double& industry, double& farming, double& home) {
+    cout << "New industry multiplier : ";
+    cin >> industry;
+    cout << "New Farming multiplier : ";
+    cin >> farming;
+    cout << "New Home multiplier : ";
+    cin >> home;
+}
 
+void viewprice(double industry, double farm, double home) {
+    cout << "industry multiplier : " << industry << "\n";
+    cout << "Farming multiplier : " << farm << "\n";
+    cout << "Home multiplier : " << home << "\n";
+}
 
 int main() {
+    double industryM = 0.11;
+    double farmingM = 0.10;
+    double homeM = 0.15;
     string new_name, myText;
     int new_ID, choice = 1;
     vector<clients> client_list;
@@ -79,8 +95,9 @@ int main() {
         cout << "1. Add new client\n";
         cout << "2. Delete client by ID\n";
         cout << "3. Show All clients\n";
-        cout << "4. Paying Bill\n";
-        cout << "5. Price Changing\n";
+        cout << "4. Price Changing\n";
+        cout << "5. View Price Multipliers\n";
+        cout << "6. Paying Bill\n";
         cout << "0. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
@@ -105,11 +122,12 @@ int main() {
         } else if (choice == 3) {
 
         } else if (choice == 4) {
-
+            changeprice(industryM, farmingM, homeM);
         } else if (choice == 5) {
-
+            viewprice(industryM, farmingM, homeM);
         } else if (choice == 0) {
             cout << "Exiting the program.\n";
+
         }
     }
 }
