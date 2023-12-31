@@ -9,8 +9,7 @@ using namespace std;
         private:
             string name;
             string usage_type; //industry, farming, home
-            int ID;
-            double water_usage;
+        double water_usage;
             double water_bill;
             double electricity_usage;
             double electricity_bill;     
@@ -54,6 +53,7 @@ using namespace std;
                 return ID;
             }
 
+        int ID;
     };
 
 
@@ -188,13 +188,29 @@ int main() {
     while (choice != 0) {
         menu();
         cin >> choice;
+        vector<int> existingIDs; // Mevcut ID'leri saklıyor yeni vector
+        for (const clients &client: client_list)
+            existingIDs.push_back(client.ID);
         if (choice == 1) {
             cout << "enter new client name: ";
             cin >> new_name;
-            cout << "enter new client ID: ";
-            cin >> new_ID;
+            while (true) {  //ID mevcut mu değil mi kontrol ediyor
+                cout << "Enter new client ID: ";
+                cin >> new_ID;
+                bool idExists = false;
+                for (int id : existingIDs) {
+                    if (id == new_ID) {
+                        idExists = true;
+                        cout << "This ID is already taken. Please enter a new one." << endl;
+                        break;
+                    }
+                }
+                if (!idExists) {
+                    break;
+                }
+            }
             while(usage_type != 1 && usage_type != 2 && usage_type != 3){     
-                cout << "1. industry/n2. farming/n3. home/nenter usage type: ";
+                cout << "1. industry\n 2. farming\n 3. home\n enter usage type: ";
                 cin >>usage_type;
                 if(usage_type == 1){
                     usage = "industry";
