@@ -9,7 +9,8 @@ using namespace std;
         private:
             string name;
             string usage_type; //industry, farming, home
-        double water_usage;
+            int ID;
+            double water_usage;
             double water_bill;
             double electricity_usage;
             double electricity_bill;     
@@ -53,7 +54,6 @@ using namespace std;
                 return ID;
             }
 
-        int ID;
     };
 
 
@@ -170,7 +170,9 @@ void menu(){
         cout << "1. Add new client"<<endl;
         cout << "2. Delete client by ID"<<endl;
         cout << "3. Show All clients"<<endl;
+        //change usage
         cout << "4. Show client bills"<<endl;
+        //change price
         cout << "5. Change water price"<<endl;
         cout << "6. Change electricity price"<<endl;
         cout << "0. Exit\n"<<endl;
@@ -184,33 +186,32 @@ int main() {
     int new_ID, choice = 1, usage_type;
     vector<clients> client_list;
     const string clientsFile = "clients.txt";
+    const string detailsFile = "details.txt";
     readFile(clientsFile, &client_list);
     while (choice != 0) {
         menu();
         cin >> choice;
-        vector<int> existingIDs; // Mevcut ID'leri saklıyor yeni vector
-        for (const clients &client: client_list)
-            existingIDs.push_back(client.ID);
         if (choice == 1) {
+            bool checkID = false;
             cout << "enter new client name: ";
             cin >> new_name;
-            while (true) {  //ID mevcut mu değil mi kontrol ediyor
-                cout << "Enter new client ID: ";
+            do{
+                cout << "enter new client ID: ";
                 cin >> new_ID;
-                bool idExists = false;
-                for (int id : existingIDs) {
-                    if (id == new_ID) {
-                        idExists = true;
-                        cout << "This ID is already taken. Please enter a new one." << endl;
+                for(int i=0; i<client_list.size(); i++){
+                    if(client_list[i].getID() == new_ID){
+                        cout<<endl<<"This ID is already taken. Please enter a new one.."<<endl;
+                        checkID = true;
                         break;
                     }
+                    else{
+                        checkID = false;
+                    
+                    }
                 }
-                if (!idExists) {
-                    break;
-                }
-            }
+            }while(checkID);
             while(usage_type != 1 && usage_type != 2 && usage_type != 3){     
-                cout << "1. industry\n 2. farming\n 3. home\n enter usage type: ";
+                cout << "\n1. industry/n2. farming/n3. home/nenter usage type: ";
                 cin >>usage_type;
                 if(usage_type == 1){
                     usage = "industry";

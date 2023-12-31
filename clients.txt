@@ -3,3 +3,4 @@ utku 55
 mehmet 32
 bora 71
 dzeko 12
+riza 51
