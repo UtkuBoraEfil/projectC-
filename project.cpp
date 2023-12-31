@@ -8,7 +8,12 @@ using namespace std;
     class clients{
         private:
             string name;
+            string usage_type; //industry, farming, home
             int ID;
+            double water_usage;
+            double water_bill;
+            double electricity_usage;
+            double electricity_bill;     
 
         public:
         //User-defined Constructors for creating clients with id and name
@@ -17,9 +22,10 @@ using namespace std;
                 ID = 0;
             }
 
-            clients(string name_val, int ID_val){
+            clients(string name_val, int ID_val , string usage){
                 name = name_val;
                 ID = ID_val;
+                usage_type = usage;
                 
             }
 
@@ -29,6 +35,15 @@ using namespace std;
 
             void setID(int ID_val){
                 ID = ID_val;
+            }
+
+            void setWaterUsage(double water_usage_val){
+                water_usage = water_usage_val;
+
+            }
+
+            void setElectricityUsage(double electricity_usage_val){
+                electricity_usage = electricity_usage_val;
             }
 
             string getName() const {
@@ -67,6 +82,7 @@ using namespace std;
 
     }
 
+    //deletes the client from the vector and file.
     void deleteClient(vector<clients> *client_list, int del_ID){
         bool isDeleted = false;
         for(int i=0; i<client_list->size(); i++){
@@ -83,56 +99,89 @@ using namespace std;
         
     }
 
-void changeprice(double& industry, double& farming, double& home) {
+//we use this function to view the price multipliers for electricity and water
+    void viewprice(double industry, double farm, double home) {
+    cout <<endl<<endl<< "industry multiplier : " << industry << endl;
+    cout << "Farming multiplier : " << farm << endl;
+    cout << "Home multiplier : " << home << endl;
+}
+
+
+//we use this function to change the water price multipliers
+void changeWaterPrice(double& industry, double& farming, double& home) {
     int choice, isOver=1;
     while(isOver){
-    cout<<endl<<endl<<"1. industry multiplier"<<endl<<"2. Farming multiplier"<<endl<<"3. Home multiplier"<<endl<<endl<<"choose which one to change: ";
-    cin>>choice;
+        viewprice(industry, farming, home);
+        cout<<endl<<endl<<"1. industry multiplier"<<endl<<"2. Farming multiplier"<<endl<<"3. Home multiplier"<<endl<<endl<<"choose which one to change: ";
+        cin>>choice;
         if(choice == 1){
         cout <<endl<< "New industry multiplier : ";
         cin >> industry;
         cout<<"industry multiplier changed."<<endl;
-    }
-    else if(choice == 2){
+        }
+        else if(choice == 2){
         cout <<endl<< "New Farming multiplier : ";
         cin >> farming;
         cout<<"Farming multiplier changed."<<endl;
-    }   
-    else if(choice == 3){
+        }   
+        else if(choice == 3){
         cout <<endl<< "New Home multiplier : ";
         cin >> home;
         cout<<"Home multiplier changed."<<endl;
-    }
-    cout<<endl<<endl<<"1. Change another multiplier"<<endl<<"0. Exit"<<endl<<endl<<"choose: ";
-    cin>>isOver;
+        }
+        cout<<endl<<endl<<"1. Change another multiplier"<<endl<<"0. Exit"<<endl<<endl<<"choose: ";
+        cin>>isOver;
     }
 
 }
 
-void viewprice(double industry, double farm, double home) {
-    cout <<endl<<endl<< "industry multiplier : " << industry << "\n";
-    cout << "Farming multiplier : " << farm << "\n";
-    cout << "Home multiplier : " << home << "\n";
+
+//we use this function to change the electricity price multipliers
+void changeElectricityPrice(double& industry, double& farming, double& home) {
+    int choice, isOver=1;
+    while(isOver){
+        viewprice(industry, farming, home);
+        cout<<endl<<endl<<"1. industry multiplier"<<endl<<"2. Farming multiplier"<<endl<<"3. Home multiplier"<<endl<<endl<<"choose which one to change: ";
+        cin>>choice;
+        if(choice == 1){
+        cout <<endl<< "New industry multiplier : ";
+        cin >> industry;
+        cout<<"industry multiplier changed."<<endl;
+        }
+        else if(choice == 2){
+        cout <<endl<< "New Farming multiplier : ";
+        cin >> farming;
+        cout<<"Farming multiplier changed."<<endl;
+        }   
+        else if(choice == 3){
+        cout <<endl<< "New Home multiplier : ";
+        cin >> home;
+        cout<<"Home multiplier changed."<<endl;
+        }
+        cout<<endl<<endl<<"1. Change another multiplier"<<endl<<"0. Exit"<<endl<<endl<<"choose: ";
+        cin>>isOver;
+    }
+
 }
+
 
 void menu(){
     cout << endl<<endl<<"---------------MENU---------------\n";
-        cout << "1. Add new client\n";
-        cout << "2. Delete client by ID\n";
-        cout << "3. Show All clients\n";
-        cout << "4. Price Changing\n";
-        cout << "5. View Price Multipliers\n";
-        cout << "6. Paying Bill\n";
+        cout << "1. Add new client"<<endl;
+        cout << "2. Delete client by ID"<<endl;
+        cout << "3. Show All clients"<<endl;
+        cout << "4. Show client bills"<<endl;
+        cout << "5. Change water price"<<endl;
+        cout << "6. Change electricity price"<<endl;
         cout << "0. Exit\n"<<endl;
         cout << "Enter your choice: ";
 }
 
 int main() {
-    double industryM = 0.11;
-    double farmingM = 0.10;
-    double homeM = 0.15;
-    string new_name, myText;
-    int new_ID, choice = 1;
+    double w_industry = 0.11, w_farming = 0.10, w_home = 0.15;//per liter
+    double e_industry = 0.50, e_farming = 0.48, e_home = 0.56;//per kw
+    string new_name, usage;
+    int new_ID, choice = 1, usage_type;
     vector<clients> client_list;
     const string clientsFile = "clients.txt";
     readFile(clientsFile, &client_list);
@@ -144,7 +193,23 @@ int main() {
             cin >> new_name;
             cout << "enter new client ID: ";
             cin >> new_ID;
-            clients new_client(new_name, new_ID);
+            while(usage_type != 1 && usage_type != 2 && usage_type != 3){     
+                cout << "1. industry/n2. farming/n3. home/nenter usage type: ";
+                cin >>usage_type;
+                if(usage_type == 1){
+                    usage = "industry";
+                }
+                else if(usage_type == 2){
+                    usage = "farming";
+                }
+                else if(usage_type == 3){
+                    usage = "home";
+                }
+                else{
+                    cout<<"wrong input"<<endl;
+                }
+            }
+            clients new_client(new_name, new_ID, usage);
             client_list.push_back(new_client);
             writeFile(clientsFile, client_list);
             cout<<endl<<"New client added."<<endl;
@@ -160,9 +225,11 @@ int main() {
             }
             cout<< endl;
         } else if (choice == 4) {
-            changeprice(industryM, farmingM, homeM);
-        } else if (choice == 5) {
-            viewprice(industryM, farmingM, homeM);
+
+        } else if (choice == 5) {   
+            changeWaterPrice(w_industry, w_farming, w_home);
+        } else if (choice == 6) {
+            changeElectricityPrice(e_industry, e_farming, e_home);
         } else if (choice == 0) {
             cout << "Exiting the program.\n";
 
