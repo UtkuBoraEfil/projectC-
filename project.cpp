@@ -270,7 +270,7 @@ int main() {
             for(int i=0; i<client_list.size(); i++){
                 if(client_list[i].getID() == client_ID){
                     isFound = true;
-                    while(usage_type != 1 && usage_type != 2){
+                    do{
                         cout << "\n1. water\n2. electricity\nenter usage type: ";
                         cin >>usage_type;
                         if(usage_type == 1){
@@ -290,7 +290,7 @@ int main() {
                         else{
                             cout<<"wrong input"<<endl;
                         }
-                    }
+                    }while(usage_type != 1 && usage_type != 2);
                 }
             }
             if(!isFound){

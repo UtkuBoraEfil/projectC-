@@ -1,7 +1,7 @@
 meric 31 home 214.23 0
-utku 55 home 0 0
+utku 55 home 198.16 719
 mehmet 32 home 0 0
 bora 71 home 0 875
 dzeko 12 home 0 0
 riza 51 home 0 0
-arda 10 home 213 0
+arda 10 home 213 631
