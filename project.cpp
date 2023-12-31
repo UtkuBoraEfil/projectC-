@@ -26,7 +26,14 @@ using namespace std;
                 name = name_val;
                 ID = ID_val;
                 usage_type = usage;
-                
+                electricity_usage = 0;
+                water_usage = 0;
+                water_bill = 0.0;
+                electricity_bill = 0.0;
+            }
+
+            void setUsage_type(string usage_val){
+                usage_type = usage_val;
             }
 
             void setName(string name_val){
@@ -39,6 +46,7 @@ using namespace std;
 
             void setWaterUsage(double water_usage_val){
                 water_usage = water_usage_val;
+                
 
             }
 
@@ -54,6 +62,16 @@ using namespace std;
                 return ID;
             }
 
+            string getUsage_type(){
+                return usage_type;
+            }
+            double getWaterUsage(){
+                return water_usage;
+            }
+            double getElectricityUsage(){
+                return electricity_usage;
+            }
+
     };
 
 
@@ -61,11 +79,15 @@ using namespace std;
     void readFile(string fileName, vector<clients> *client_list){
         ifstream inputFile(fileName);
         clients old_file;
-        string name;
+        string name, usage_type;
         int ID;
-        while(inputFile>>name>>ID){
+        double water_usage, electricity_usage;
+        while(inputFile>>name>>ID>>usage_type>>water_usage>>electricity_usage){
             old_file.setName(name);
             old_file.setID(ID);
+            old_file.setUsage_type(usage_type);
+            old_file.setWaterUsage(water_usage);
+            old_file.setElectricityUsage(electricity_usage);
             client_list->push_back(old_file);
         }
 
@@ -76,7 +98,7 @@ using namespace std;
     void writeFile(string fileName, vector<clients> client_list){
         ofstream outputFile(fileName);
         for(int i=0; i<client_list.size(); i++){
-            outputFile<<client_list[i].getName()<<" "<<client_list[i].getID()<<endl;
+            outputFile<<client_list[i].getName()<<" "<<client_list[i].getID()<<" "<<client_list[i].getUsage_type()<<" "<<client_list[i].getWaterUsage()<<" "<<client_list[i].getElectricityUsage()<<endl;
         }
         outputFile.close();
 
@@ -170,11 +192,9 @@ void menu(){
         cout << "1. Add new client"<<endl;
         cout << "2. Delete client by ID"<<endl;
         cout << "3. Show All clients"<<endl;
-        //change usage
-        cout << "4. Show client bills"<<endl;
-        //change price
-        cout << "5. Change water price"<<endl;
-        cout << "6. Change electricity price"<<endl;
+        cout << "4. Change client usage"<<endl;
+        cout << "5. Show client bills"<<endl;
+        cout << "6. Change price multiplier"<<endl;
         cout << "0. Exit\n"<<endl;
         cout << "Enter your choice: ";
 }
@@ -186,7 +206,6 @@ int main() {
     int new_ID, choice = 1, usage_type;
     vector<clients> client_list;
     const string clientsFile = "clients.txt";
-    const string detailsFile = "details.txt";
     readFile(clientsFile, &client_list);
     while (choice != 0) {
         menu();
@@ -211,7 +230,7 @@ int main() {
                 }
             }while(checkID);
             while(usage_type != 1 && usage_type != 2 && usage_type != 3){     
-                cout << "\n1. industry/n2. farming/n3. home/nenter usage type: ";
+                cout << "\n1. industry\n2. farming\n3. home\nenter usage type: ";
                 cin >>usage_type;
                 if(usage_type == 1){
                     usage = "industry";
@@ -238,15 +257,76 @@ int main() {
         } else if (choice == 3) {
             cout <<endl<<endl<<"---------------CLIENTS---------------\n"<<endl;
             for (int i = 0; i < client_list.size(); i++) {
-                cout << client_list[i].getName() << " " << client_list[i].getID() << endl;
+                cout << client_list[i].getName() << " " << client_list[i].getID()<< endl;
             }
             cout<< endl;
-        } else if (choice == 4) {
-
-        } else if (choice == 5) {   
-            changeWaterPrice(w_industry, w_farming, w_home);
-        } else if (choice == 6) {
-            changeElectricityPrice(e_industry, e_farming, e_home);
+        }
+        else if(choice == 4){
+            int client_ID, usage_type;
+            double usage;
+            bool isFound = false;
+            cout <<endl<< "enter client ID: ";
+            cin >> client_ID;
+            for(int i=0; i<client_list.size(); i++){
+                if(client_list[i].getID() == client_ID){
+                    isFound = true;
+                    while(usage_type != 1 && usage_type != 2){
+                        cout << "\n1. water\n2. electricity\nenter usage type: ";
+                        cin >>usage_type;
+                        if(usage_type == 1){
+                            cout << "enter water usage: ";
+                            cin >> usage;
+                            client_list[i].setWaterUsage(usage);
+                            cout<<"water usage changed."<<endl;
+                            writeFile(clientsFile, client_list);
+                        }
+                        else if(usage_type == 2){
+                            cout << "enter electricity usage: ";
+                            cin >> usage;
+                            client_list[i].setElectricityUsage(usage);
+                            cout<<"electricity usage changed."<<endl;
+                            writeFile(clientsFile, client_list);
+                        }
+                        else{
+                            cout<<"wrong input"<<endl;
+                        }
+                    }
+                }
+            }
+            if(!isFound){
+                cout<<endl<<"Client not found."<<endl;
+            }
+        
+        } else if (choice == 5) {
+            int client_ID;
+            bool isFound = false;
+            cout <<endl<< "enter client ID: ";
+            cin >> client_ID;
+            for(int i=0; i<client_list.size(); i++){
+                if(client_list[i].getID() == client_ID){
+                    isFound = true;
+                    cout<<endl<<endl<<"---------------BILLS---------------\n"<<endl;
+                    cout << "Water bill: " << client_list[i].getWaterUsage() * (client_list[i].getUsage_type() == "industry" ? w_industry : client_list[i].getUsage_type() == "farming" ? w_farming : w_home) << endl;
+                    cout << "Electricity bill: " << client_list[i].getElectricityUsage() * (client_list[i].getUsage_type() == "industry" ? e_industry : client_list[i].getUsage_type() == "farming" ? e_farming : e_home) << endl;
+                }
+            }
+            if(!isFound){
+                cout<<endl<<"Client not found."<<endl;
+            }
+        } else if (choice == 6) {   
+            int choice;
+            do{
+                cout <<endl<<endl<<"1. Water price multiplier"<<endl<<"2. Electricity price multiplier"<<endl<<endl<<"choose: ";
+                cin>>choice;
+                if(choice != 1 && choice != 2){
+                    cout<<"wrong input"<<endl;
+                }
+            }while(choice != 1 && choice != 2);
+            if (choice == 1) {
+                changeWaterPrice(w_industry, w_farming, w_home);
+            } else if (choice == 2) {
+                changeElectricityPrice(e_industry, e_farming, e_home);
+            }
         } else if (choice == 0) {
             cout << "Exiting the program.\n";
 

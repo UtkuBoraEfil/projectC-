@@ -1,6 +1,7 @@
-meric 31
-utku 55
-mehmet 32
-bora 71
-dzeko 12
-riza 51
+meric 31 home 214.23 0
+utku 55 home 0 0
+mehmet 32 home 0 0
+bora 71 home 0 875
+dzeko 12 home 0 0
+riza 51 home 0 0
+arda 10 home 213 0
