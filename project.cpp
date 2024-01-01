@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 
 
@@ -82,7 +84,8 @@ using namespace std;
         string name, usage_type;
         int ID;
         double water_usage, electricity_usage;
-        while(inputFile>>name>>ID>>usage_type>>water_usage>>electricity_usage){
+        while(inputFile>>__quoted(name)>>ID>>usage_type>>water_usage>>electricity_usage){
+            cout<<name<<endl;
             old_file.setName(name);
             old_file.setID(ID);
             old_file.setUsage_type(usage_type);
@@ -98,7 +101,7 @@ using namespace std;
     void writeFile(string fileName, vector<clients> client_list){
         ofstream outputFile(fileName);
         for(int i=0; i<client_list.size(); i++){
-            outputFile<<client_list[i].getName()<<" "<<client_list[i].getID()<<" "<<client_list[i].getUsage_type()<<" "<<client_list[i].getWaterUsage()<<" "<<client_list[i].getElectricityUsage()<<endl;
+            outputFile<<" \" "<<client_list[i].getName()<<" \" "<<" "<<client_list[i].getID()<<" "<<client_list[i].getUsage_type()<<" "<<client_list[i].getWaterUsage()<<" "<<client_list[i].getElectricityUsage()<<endl;
         }
         outputFile.close();
 
@@ -212,8 +215,9 @@ int main() {
         cin >> choice;
         if (choice == 1) {
             bool checkID = false;
-            cout << "enter new client name: ";
-            cin >> new_name;
+            cin.ignore();
+            cout << "enter new client's full name: ";
+            getline(cin, new_name);
             do{
                 cout << "enter new client ID: ";
                 cin >> new_ID;
@@ -229,7 +233,7 @@ int main() {
                     }
                 }
             }while(checkID);
-            while(usage_type != 1 && usage_type != 2 && usage_type != 3){     
+            do{     
                 cout << "\n1. industry\n2. farming\n3. home\nenter usage type: ";
                 cin >>usage_type;
                 if(usage_type == 1){
@@ -244,7 +248,7 @@ int main() {
                 else{
                     cout<<"wrong input"<<endl;
                 }
-            }
+            }while(usage_type != 1 && usage_type != 2 && usage_type != 3);
             clients new_client(new_name, new_ID, usage);
             client_list.push_back(new_client);
             writeFile(clientsFile, client_list);
