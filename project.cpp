@@ -84,8 +84,7 @@ using namespace std;
         string name, usage_type;
         int ID;
         double water_usage, electricity_usage;
-        while(inputFile>>quoted(name)>>ID>>usage_type>>water_usage>>electricity_usage){
-            cout<<name<<endl;
+        while(inputFile>>quoted(name)>>ID>>usage_type>>water_usage>>electricity_usage){//quoted function reads the string with spaces. in some versions syntax is __quoted . 
             old_file.setName(name);
             old_file.setID(ID);
             old_file.setUsage_type(usage_type);
@@ -101,7 +100,7 @@ using namespace std;
     void writeFile(string fileName, vector<clients> client_list){
         ofstream outputFile(fileName);
         for(int i=0; i<client_list.size(); i++){
-            outputFile<<" \" "<<client_list[i].getName()<<" \" "<<" "<<client_list[i].getID()<<" "<<client_list[i].getUsage_type()<<" "<<client_list[i].getWaterUsage()<<" "<<client_list[i].getElectricityUsage()<<endl;
+            outputFile<<"\""<<client_list[i].getName()<<"\""<<" "<<client_list[i].getID()<<" "<<client_list[i].getUsage_type()<<" "<<client_list[i].getWaterUsage()<<" "<<client_list[i].getElectricityUsage()<<endl;
         }
         outputFile.close();
 
@@ -189,7 +188,7 @@ void changeElectricityPrice(double& industry, double& farming, double& home) {
 
 }
 
-
+// menu that shows the options
 void menu(){
     cout << endl<<endl<<"---------------MENU---------------\n";
         cout << "1. Add new client"<<endl;
@@ -207,17 +206,31 @@ int main() {
     double e_industry = 2.45, e_farming = 2.15, e_home = 2.70; //per kw
     string new_name, usage;
     int new_ID, choice = 1, usage_type;
-    vector<clients> client_list;
+
+    //vector for storing clients
+    vector<clients> client_list; 
+
+
     const string clientsFile = "clients.txt";
+
+
+    //we use this function when program starts to read the clients.txt file and store the data in a client_list vector
     readFile(clientsFile, &client_list);
+
+
     while (choice != 0) {
+        //menu function shows the options
         menu();
         cin >> choice;
+
+        //add new client
         if (choice == 1) {
             bool checkID = false;
             cin.ignore();
             cout << "enter new client's full name: ";
-            getline(cin, new_name);
+            getline(cin, new_name); //we use getline to get the full name
+
+            //we check if the ID is already taken
             do{
                 cout << "enter new client ID: ";
                 cin >> new_ID;
@@ -233,6 +246,8 @@ int main() {
                     }
                 }
             }while(checkID);
+
+            //we get the usage type
             do{     
                 cout << "\n1. industry\n2. farming\n3. home\nenter usage type: ";
                 cin >>usage_type;
@@ -249,32 +264,48 @@ int main() {
                     cout<<"wrong input"<<endl;
                 }
             }while(usage_type != 1 && usage_type != 2 && usage_type != 3);
+
+            //we create a new client with the given data and push it to the client_list vector
             clients new_client(new_name, new_ID, usage);
             client_list.push_back(new_client);
+
+            //we write the new client data to the clients.txt file
             writeFile(clientsFile, client_list);
             cout<<endl<<"New client added."<<endl;
+
+        //delete client
         } else if (choice == 2) {
             int del_ID;
-            cout <<endl<< "enter delete for ID :";
+            cout <<endl<< "enter ID for delete the client :";
             cin >> del_ID;
             deleteClient(&client_list, del_ID);
+
+        //show all clients
         } else if (choice == 3) {
             cout <<endl<<endl<<"---------------CLIENTS---------------\n"<<endl;
             for (int i = 0; i < client_list.size(); i++) {
-                cout << client_list[i].getName() << " " << client_list[i].getID()<< endl;
+                 cout <<"client: "<< client_list[i].getName() << "   ID: " << client_list[i].getID()<< endl;
             }
             cout<< endl;
         }
+
+
+        //change client usage
         else if(choice == 4){
             int client_ID, usage_type;
             double usage;
             bool isFound = false;
+
+
             cout <<endl<< "enter client ID: ";
             cin >> client_ID;
+
+            //we check if the client is in the vector
             for(int i=0; i<client_list.size(); i++){
                 if(client_list[i].getID() == client_ID){
                     isFound = true;
                     do{
+                        //we get the usage type to change
                         cout << "\n1. water\n2. electricity\nenter usage type: ";
                         cin >>usage_type;
                         if(usage_type == 1){
@@ -301,14 +332,22 @@ int main() {
                 cout<<endl<<"Client not found."<<endl;
             }
         
+
+        //show client bills
         } else if (choice == 5) {
             int client_ID;
             bool isFound = false;
+
+
             cout <<endl<< "enter client ID: ";
             cin >> client_ID;
+
+            //we check if the client is in the vector
             for(int i=0; i<client_list.size(); i++){
                 if(client_list[i].getID() == client_ID){
                     isFound = true;
+
+                    //we calculate the bills according to the usage type and price multipliers
                     cout<<endl<<endl<<"---------------BILLS---------------\n"<<endl;
                     cout << "Water bill (L): " << client_list[i].getWaterUsage() * (client_list[i].getUsage_type() == "industry" ? w_industry : client_list[i].getUsage_type() == "farming" ? w_farming : w_home) << endl;
                     cout << "Electricity bill (KW): " << client_list[i].getElectricityUsage() * (client_list[i].getUsage_type() == "industry" ? e_industry : client_list[i].getUsage_type() == "farming" ? e_farming : e_home) << endl;
@@ -317,6 +356,8 @@ int main() {
             if(!isFound){
                 cout<<endl<<"Client not found."<<endl;
             }
+
+        //change price multiplier
         } else if (choice == 6) {   
             int choice;
             do{
