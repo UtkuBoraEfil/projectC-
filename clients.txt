@@ -1,9 +1,9 @@
- "    Mehmet Meric Yaman    "  10 home 30 45
- "    Utku Bora Efil    "  11 farming 40 20
- "    Aytekin Yilmaz    "  25 industry 70 90
- "    Melek Yaman    "  1 industry 100 200
- "    Ayse Atay    "  45 farming 47 56
- "   Hatice Zengin   "  2 home 12 33
- "   Mesut Minnet   "  100 farming 58 18
- "   Kaan Ozbek   "  49 farming 78 33
- "  Berke Atay  "  99 industry 56 67
+ "Mehmet Meric Yaman"  10 home 30 45
+ "Utku Bora Efil"  11 farming 40 20
+ "Aytekin Yilmaz"  25 industry 70 90
+ "Melek Yaman"  1 industry 100 200
+ "Ayse Atay"  45 farming 47 56
+ "Hatice Zengin"  2 home 12 33
+ "Mesut Minnet"  100 farming 58 18
+ "Kaan Ozbek"  49 farming 78 33
+ "Berke Atay"  99 industry 56 67
