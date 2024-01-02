@@ -84,7 +84,7 @@ using namespace std;
         string name, usage_type;
         int ID;
         double water_usage, electricity_usage;
-        while(inputFile>>__quoted(name)>>ID>>usage_type>>water_usage>>electricity_usage){
+        while(inputFile>>quoted(name)>>ID>>usage_type>>water_usage>>electricity_usage){
             cout<<name<<endl;
             old_file.setName(name);
             old_file.setID(ID);
@@ -203,8 +203,8 @@ void menu(){
 }
 
 int main() {
-    double w_industry = 0.11, w_farming = 0.10, w_home = 0.15;//per liter
-    double e_industry = 0.50, e_farming = 0.48, e_home = 0.56;//per kw
+    double w_industry = 1.40, w_farming = 1.35, w_home = 1.50; //per liter
+    double e_industry = 2.45, e_farming = 2.15, e_home = 2.70; //per kw
     string new_name, usage;
     int new_ID, choice = 1, usage_type;
     vector<clients> client_list;
@@ -278,14 +278,14 @@ int main() {
                         cout << "\n1. water\n2. electricity\nenter usage type: ";
                         cin >>usage_type;
                         if(usage_type == 1){
-                            cout << "enter water usage: ";
+                            cout << "enter water usage (L): ";
                             cin >> usage;
                             client_list[i].setWaterUsage(usage);
                             cout<<"water usage changed."<<endl;
                             writeFile(clientsFile, client_list);
                         }
                         else if(usage_type == 2){
-                            cout << "enter electricity usage: ";
+                            cout << "enter electricity usage (KW): ";
                             cin >> usage;
                             client_list[i].setElectricityUsage(usage);
                             cout<<"electricity usage changed."<<endl;
@@ -310,8 +310,8 @@ int main() {
                 if(client_list[i].getID() == client_ID){
                     isFound = true;
                     cout<<endl<<endl<<"---------------BILLS---------------\n"<<endl;
-                    cout << "Water bill: " << client_list[i].getWaterUsage() * (client_list[i].getUsage_type() == "industry" ? w_industry : client_list[i].getUsage_type() == "farming" ? w_farming : w_home) << endl;
-                    cout << "Electricity bill: " << client_list[i].getElectricityUsage() * (client_list[i].getUsage_type() == "industry" ? e_industry : client_list[i].getUsage_type() == "farming" ? e_farming : e_home) << endl;
+                    cout << "Water bill (L): " << client_list[i].getWaterUsage() * (client_list[i].getUsage_type() == "industry" ? w_industry : client_list[i].getUsage_type() == "farming" ? w_farming : w_home) << endl;
+                    cout << "Electricity bill (KW): " << client_list[i].getElectricityUsage() * (client_list[i].getUsage_type() == "industry" ? e_industry : client_list[i].getUsage_type() == "farming" ? e_farming : e_home) << endl;
                 }
             }
             if(!isFound){
